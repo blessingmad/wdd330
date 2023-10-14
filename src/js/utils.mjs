@@ -21,3 +21,29 @@ export function setClick(selector, callback) {
   });
   qs(selector).addEventListener("click", callback);
 }
+export function renderWithTemplate(templateFn, data, callback, position="afterbegin", clear=true ) {
+  if (clear){
+    parentElement,innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, template);
+  if (callback) {
+    callback (data);
+  }
+}
+function loadTemplate(path) {
+  return async function () {
+    const res = await fetch (path);
+    if (res.ok) {
+      const html = await res.text();
+      return html;
+    }
+  }
+}
+export async function loadHeaderFooter () {
+  const headerTemplateFn = loadTemplate("/partials/header.htm");
+  const footerTemplateFn = loadTemplate("/partials/footer.html");
+  const headerEl = document.querrySelector("#main-header");
+  const footerEl = document.querrySelector("#main-footer");
+  renderWithTemplate(headerTemplateFn, headerEl);
+  renderWithTemplate(footerTemplateFn, footerEl);
+}
